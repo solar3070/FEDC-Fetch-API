@@ -1,13 +1,10 @@
-/**
- * state의 형태
+/** state 구조
  * {
  *    productName: 상품명,
  *    basePrice: 상품 기본 가격,
  *    selectedOptions: [Option]
  * }
- *
  */
-
 export default function Cart({ $target, initialState, onRemove }) {
   const $cart = document.createElement("div");
   $target.appendChild($cart);
@@ -30,12 +27,9 @@ export default function Cart({ $target, initialState, onRemove }) {
   const renderOption = (option, index) => {
     const { productName, basePrice } = this.state;
 
-    return `
-    <li data-index="${index}" class="cartItem">${productName} - ${
-      option.optionName
-    } | ${basePrice + option.optionPrice}, ${
-      option.ea
-    }개 <button class="remove">X</button></li>`;
+    return `<li data-index="${index}" class="cartItem">
+    ${productName} - ${option.optionName} | ${basePrice + option.optionPrice}, 
+    ${option.ea}개 <button class="remove">X</button></li>`;
   };
 
   this.render = () => {
@@ -50,9 +44,7 @@ export default function Cart({ $target, initialState, onRemove }) {
             .join("")
         }
       </ul>
-      <div>
-        ${calculateTotalPrice()} 원
-      </div>
+      <div>${calculateTotalPrice()} 원</div>
     `;
 
     $cart.querySelectorAll(".remove").forEach(($button) => {

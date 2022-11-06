@@ -23,9 +23,9 @@ export default function ProductOptions({ $target, initialState, onSelect }) {
   };
 
   const createOptionFullName = ({ optionName, optionPrice, stock }) => {
-    return `${optionName} ${
-      optionPrice > 0 ? `(옵션가 ${optionPrice})` : ""
-    } | ${stock > 0 ? `재고 ${stock}` : "재고 없음"}`;
+    return `${optionName} 
+    ${optionPrice > 0 ? `(옵션가 ${optionPrice})` : ""} | 
+    ${stock > 0 ? `재고 ${stock}` : "재고 없음"}`;
   };
 
   $select.addEventListener("change", (e) => {
@@ -45,9 +45,8 @@ export default function ProductOptions({ $target, initialState, onSelect }) {
           .map(
             (option) =>
               `<option ${option.stock === 0 ? "disabled" : ""} 
-              value="${option.optionId}">${createOptionFullName(
-                option
-              )}</option>`
+              value="${option.optionId}">
+              ${createOptionFullName(option)}</option>`
           )
           .join("")}
       `;
