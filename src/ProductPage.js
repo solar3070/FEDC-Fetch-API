@@ -1,11 +1,13 @@
 import ProductOptions from "./ProductOptions.js";
+import Cart from "./Cart.js";
 import { request } from "./api.js";
 
 /** state 구조
  * {
  *  productId:1,
  *  product: Product,
- *  optionData: []
+ *  optionData: [],
+ *  selectedOption: []
  * }
  */
 export default function ProductPage({ $target, initialState }) {
@@ -21,6 +23,27 @@ export default function ProductPage({ $target, initialState }) {
     onSelect: (option) => {
       console.log(option);
     },
+  });
+
+  const cart = new Cart({
+    $target: $product,
+    initialState: {
+      productName: "이디어츠 굿즈",
+      basePrice: 10000,
+      selectedOptions: [
+        {
+          optionName: "언제나 티셔츠",
+          optionPrice: 10000,
+          ea: 1,
+        },
+        {
+          optionName: "로토 전용 피크 5개 세트",
+          optionPrice: 500,
+          ea: 3,
+        },
+      ],
+    },
+    onRemove: () => {},
   });
 
   this.setState = (nextState) => {
