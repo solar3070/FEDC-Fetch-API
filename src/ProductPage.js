@@ -21,29 +21,41 @@ export default function ProductPage({ $target, initialState }) {
     $target: $product,
     initialState: [],
     onSelect: (option) => {
-      console.log(option);
+      const nextState = { ...this.state };
+      const { selectedOptions } = this.state;
+
+      const selectedOptionIndex = selectedOptions.findIndex(
+        (selectedOption) => selectedOption.optionId === option.optionId
+      );
+
+      if (selectedOptionIndex > -1) {
+        nextState.selectedOptions[selectedOptionIndex].ea++;
+      } else {
+        nextState.selectedOptions.push({
+          optionId: option.optionId,
+          optionName: option.optionName,
+          optionPrice: option.optionPrice,
+          ea: 1,
+        });
+      }
+
+      this.setState(nextState);
     },
   });
 
   const cart = new Cart({
     $target: $product,
     initialState: {
-      productName: "이디어츠 굿즈",
-      basePrice: 10000,
-      selectedOptions: [
-        {
-          optionName: "언제나 티셔츠",
-          optionPrice: 10000,
-          ea: 1,
-        },
-        {
-          optionName: "로토 전용 피크 5개 세트",
-          optionPrice: 500,
-          ea: 3,
-        },
-      ],
+      productName: "",
+      basePrice: 0,
+      selectedOptions: [],
     },
-    onRemove: () => {},
+    onRemove: (selectedOptionIndex) => {
+      const nextState = { ...this.state };
+      nextState.selectedOptions.splice(selectedOptionIndex, 1);
+
+      this.setState(nextState);
+    },
   });
 
   this.setState = (nextState) => {
@@ -53,7 +65,14 @@ export default function ProductPage({ $target, initialState }) {
     }
 
     this.state = nextState;
-    productOptions.setState(this.state.optionData);
+
+    const { product, selectedOptions, optionData } = this.state;
+    productOptions.setState(optionData);
+    cart.setState({
+      productName: product.name,
+      basePrice: product.basePrice,
+      selectedOptions: selectedOptions,
+    });
   };
 
   this.render = () => {};
@@ -66,6 +85,7 @@ export default function ProductPage({ $target, initialState }) {
           ...this.state,
           product,
           optionData: [],
+          selectedOptions: [],
         });
         return request(`product-options?product.id=${product.id}`);
       })
